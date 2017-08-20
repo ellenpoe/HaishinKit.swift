@@ -13,16 +13,18 @@ open class NetService: NSObject {
     fileprivate(set) var name:String
     fileprivate(set) var port:Int32
     fileprivate(set) var type:String
+    fileprivate(set) var includesPeerToPeer:Bool
     fileprivate(set) var running:Bool = false
     fileprivate(set) var clients:[NetClient] = []
     fileprivate(set) var service:Foundation.NetService!
     fileprivate var runloop:RunLoop!
 
-    public init(domain:String, type:String, name:String, port:Int32) {
+    public init(domain:String, type:String, name:String, port:Int32, includesPeerToPeer:Bool) {
         self.domain = domain
         self.name = name
         self.port = port
         self.type = type
+        self.includesPeerToPeer = includesPeerToPeer
     }
 
     func disconnect(_ client:NetClient) {
@@ -56,6 +58,7 @@ open class NetService: NSObject {
     fileprivate func initService() {
         runloop = RunLoop.current
         service = Foundation.NetService(domain: domain, type: type, name: name, port: port)
+        service.includesPeerToPeer = self.includesPeerToPeer
         service.delegate = self
         service.setTXTRecord(txtData)
         service.schedule(in: runloop, forMode: RunLoopMode.defaultRunLoopMode)
