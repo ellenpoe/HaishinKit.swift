@@ -19,7 +19,7 @@ open class NetService: NSObject {
     fileprivate(set) var service:Foundation.NetService!
     fileprivate var runloop:RunLoop!
 
-    public init(domain:String, type:String, name:String, port:Int32, includesPeerToPeer:Bool) {
+    public init(domain:String, type:String, name:String, port:Int32, includesPeerToPeer:Bool = false) {
         self.domain = domain
         self.name = name
         self.port = port

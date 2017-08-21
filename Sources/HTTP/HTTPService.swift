@@ -275,11 +275,10 @@ open class HLSService: HTTPService {
         response.headerFields["Access-Control-Allow-Origin"] = "*"
         response.headerFields["Access-Control-Expose-Headers"] = "*"
         
-        response.headerFields["Connection"] = "close"
+        response.headerFields["Connection"] = "keep-alive"
         
         defer {
             logger.trace("\(response)")
-            disconnect(client)
         }
         
         switch request.uri {
@@ -306,6 +305,7 @@ open class HLSService: HTTPService {
                 default:
                     response.statusCode = HTTPStatusCode.ok.description
                     response.body = Data(resource.utf8)
+                    response.headerFields["Content-Length"] = String(describing: resource.utf8.count)
                     client.doOutput(data: response.data)
                 }
                 return
